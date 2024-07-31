@@ -1,0 +1,9 @@
+.modal-content-pro {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 80%;      /* Set width to 80% */
+    height: 80%;     /* Set height to 80% */
+    max-width: 150vh; /* You can set a maximum width if needed */
+    max-height: 85vh; /* You can set a maximum height relative to viewport height */
+    overflow-y: auto; /* Enable scrolling if content overflows height */
+  }
