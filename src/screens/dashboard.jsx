@@ -29,7 +29,7 @@ function Dashboard() {
   const renderContent = () => {
     switch (selectedItem) {
       case "home":
-        return <HomeScreen />;
+        return  <HomeScreen onItemSelect={handleItemSelected} />;
       case "sellFront":
         return <SellFrontScreen />;
       case "listOrder":

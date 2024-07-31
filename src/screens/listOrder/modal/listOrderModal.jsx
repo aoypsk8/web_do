@@ -108,7 +108,6 @@ const ListOrderModalComponent = ({
             />
           </div>
           <div className="w-full my-5 flex px-10 justify-between pb-10 ">
-           
             <div className="w-full  border border-lineColor rounded-md flex flex-col justify-between ml-3">
               <div className="border border-lineColor w-full py-3  bg-head flex justify-between items-center px-5 ">
                 <p className="text-base font-light  flex justify-center w-1/6">
@@ -141,7 +140,7 @@ const ListOrderModalComponent = ({
                   <p className="text-base font-light  flex justify-center w-2/6">
                     {item.Product_Name}
                   </p>
-                  <div className="flex justify-center w-1/6">
+                  <div className="flex justify-center w-1/6 h-20">
                     <img src={item.Product_img} alt="" className=" " />
                   </div>
 

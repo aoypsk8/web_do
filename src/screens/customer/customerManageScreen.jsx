@@ -89,8 +89,16 @@ function CustomerManageScreen() {
       )}
       <div className="flex items-center justify-between mb-10">
         <p className="text-5xl">ຈັດການຂໍ້ມູນຜູ້ໃຊ້</p>
+        <div
+            className="border border-lineColor px-5 py-2 rounded-md flex items-center bg-secondaryColor"
+            onClick={() => openModal()}
+          >
+            <img src={ic_peopleD} alt="" className="w-7 h-7" />
+            <div className="w-full rounded text-white ml-2">ເພີ່ມພະນັກງານ</div>
+          </div>
         
       </div>
+      
       <div className="w-full grid grid-cols-3">
         {filteredProducts.map((item) => (
           <div

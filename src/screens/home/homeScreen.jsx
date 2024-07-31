@@ -1,107 +1,79 @@
-import React, { useEffect, useState } from "react";
-import ic_customer from "../../assets/icons/allCustomerD.svg";
-import ic_type from "../../assets/icons/typeD.svg";
-import ic_people from "../../assets/icons/peopleD.svg";
-import ic_allPro from "../../assets/icons/allProD.svg";
-import ic_list_Order from "../../assets/icons/listD.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { GetAllCustomer } from "../../api/cutomerAPI/customerAction";
-import { GetAllOrderToday } from "../../api/orderAPI/orderAction";
-import { GetAllProduct } from "../../api/productAPI/productAction";
-import { GetAllEmployee } from "../../api/employeeAPI/employeeAction";
-import { GetAlltype } from "../../api/typeAPI/typeAction";
-import { GetAllSupplier } from "../../api/supplier/supplierAction";
+import React from 'react';
+import { Ripple } from 'primereact/ripple'; // PrimeReact Ripple effect
 
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import InterpreterModeIcon from '@mui/icons-material/InterpreterMode';
-import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
+function HomeScreen({ onItemSelect }) {
+  const items = [
+    {
+      label: "ການບໍລິການທາງຮ້ານ",
+      items: [
+        {
+          label: "ຂາຍຫນ້າຮ້ານ",
+          icon: "pi pi-arrow-circle-down",
+          route: "sellFront",
+        },
+        {
+          label: "ລາຍການສັ່ງຊື້",
+          icon: "pi pi-arrow-circle-up",
+          route: "listOrder",
+        },
+        {
+          label: "ປະຫວັດການຂາຍ",
+          icon: "pi pi-user",
+          route: "historySold",
+        },
+      ],
+    },
+    {
+      label: "ລາຍງານ",
+      items: [
+        {
+          label: "ລາຍງານປະຫວັດການຂາຍ",
+          icon: "pi pi-chart-pie",
+          route: "report-history",
+        },
+        {
+          label: "ລາຍງານລາຍຮັບ",
+          icon: "pi pi-chart-pie",
+          route: "report-in",
+        },
+        {
+          label: "ລາຍງານລາຍຈ່າຍ",
+          icon: "pi pi-chart-pie",
+          route: "report-out",
+        },
+      ],
+    },
+  ];
 
-function HomeScreen() {
-  const dispatch = useDispatch();
-  const { customer } = useSelector((state) => state.customer);
-  const { orderToday } = useSelector((state) => state.orderToday);
-  const { product } = useSelector((state) => state.product);
-  const { employee } = useSelector((state) => state.employee);
-  const { type } = useSelector((state) => state.type);
-  const { supplier } = useSelector((state) => state.supplier);
-
-  const [customerData, setCustomerData] = useState([]);
-  const [orderTodayData, setTorderTodayData] = useState([]);
-  const [productData, setProductData] = useState([]);
-  const [employeeData, setEmplyeeData] = useState([]);
-  const [typeData, setTypeData] = useState([]);
-  const [supplierData, setSupplierData] = useState([]);
-
-
-  useEffect(() => {
-    dispatch(GetAllCustomer());
-    dispatch(GetAllOrderToday());
-    dispatch(GetAllProduct());
-    dispatch(GetAllEmployee());
-    dispatch(GetAlltype());
-    dispatch(GetAllSupplier());
-
-
-
-    setCustomerData(customer || []);
-    setTorderTodayData(orderToday || []);
-    setProductData(product || []);
-    setEmplyeeData(employee || []);
-    setTypeData(type || []);
-    setSupplierData(supplier || []);
-  }, [dispatch, customer]);
+  const handleCommand = (route) => {
+    if (route) {
+      onItemSelect(route); // Call the callback function with the route
+    }
+  };
 
   return (
-    <div className="text-5xl px-5 py-7">
-      <p>Dashboard</p>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
-        <div className="py-5 flex shadow-md shadow-subTextColor px-4 rounded-xl">
-          <PeopleAltIcon sx={{ fontSize: 80 }} />
-          <div className="ml-2">
-            <div className="text-4xl">{customerData.length}</div>
-            <div className="text-2xl text-unSelectText">ລູກຄ້າທັງຫມົດ</div>
+    <div className="admin-menu mx-auto my-10 flex flex-col items-center w-full lg:w-800px px-72">
+      {items.map((item, mainIndex) => (
+        <div key={mainIndex} className="w-full px-4">
+          <h3>{item.label}</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 py-3 ">
+            {item.items.map((subItem, subIndex) => (
+              <div
+                key={subIndex}
+                onClick={() => handleCommand(subItem.route)}
+                role="button"
+                className="relative py-4 px-6 flex flex-col gap-3 select-none border-solid border-1px border-w-blue/50  
+                hover:bg-w-blue/5 hover:shadow-lg hover:-translate-y-2 transition-translate duration-0.5s active:translate-y-0
+                rounded-xl border border-ggColor"
+              >
+                <i className={`pi ${subItem.icon} text-w-blue`} style={{ fontSize: '42px' }} />
+                <span>{subItem.label}</span>
+                <Ripple />
+              </div>
+            ))}
           </div>
         </div>
-        <div className="py-5 flex shadow-md shadow-subTextColor px-4 rounded-xl">
-          <PlaylistAddCheckIcon sx={{ fontSize: 80 }} />
-          <div className="ml-2">
-            <div className="text-4xl">{orderTodayData.length}</div>
-            <div className="text-2xl text-unSelectText">
-              ລາຍການທີ່ໄດ້ຂາຍ
-            </div>
-          </div>
-        </div>
-        <div className="py-5 flex shadow-md shadow-subTextColor px-4 rounded-xl">
-          <InventoryIcon sx={{ fontSize: 80 }} />
-          <div className="ml-2">
-            <div className="text-4xl">{productData.length}</div>
-            <div className="text-2xl text-unSelectText">ສິນຄ້າທັງຫມົດ</div>
-          </div>
-        </div>
-        <div className="py-5 flex shadow-md shadow-subTextColor px-4 rounded-xl">
-          <InterpreterModeIcon sx={{ fontSize: 80 }} />
-          <div className="ml-2">
-            <div className="text-4xl">{employeeData.length}</div>
-            <div className="text-2xl text-unSelectText">ພະນັກງານທັງຫມົດ</div>
-          </div>
-        </div>
-        <div className="py-5 flex shadow-md shadow-subTextColor px-4 rounded-xl">
-          <FormatColorFillIcon sx={{ fontSize: 80 }} />
-          <div className="ml-2">
-            <div className="text-4xl">{typeData.length}</div>
-            <div className="text-2xl text-unSelectText">ປະເພດສິນຄ້າທັງຫມົດ</div>
-          </div>
-        </div>
-        <div className="py-5 flex shadow-md shadow-subTextColor px-4 rounded-xl">
-          <PeopleAltIcon sx={{ fontSize: 80 }} />
-          <div className="ml-2">
-            <div className="text-4xl">{supplierData.length}</div>
-            <div className="text-2xl text-unSelectText">ຜູ້ສະຫນອງທັງຫມົດ</div>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }

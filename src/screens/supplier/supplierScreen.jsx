@@ -1,6 +1,6 @@
 // Home.js
 import React, { useEffect, useState } from "react";
-import { IoIosArrowDown, IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { LuCalendarSearch } from "react-icons/lu";
 import "../../App.css";
 import ic_save1 from "../../assets/icons/save1.svg";
@@ -222,115 +222,88 @@ function SupplierScreen() {
           <div className="text-white text-2xl ">ບັນທຶກ</div>
         </div>
       </div>
-      <div className="w-full h-3/4  border border-lineColor py-3 rounded-md flex flex-col justify-between mt-3">
-        <div className="flex justify-between items-center px-5 pb-5">
-          <p className="text-xl w-1/3">ລາຍການຜູ້ສະຫນອງທັງຫມົດ</p>
-          
+      <form className="w-full px-36 mt-5">
+        <table className="w-full mt-10">
+          <thead>
+            <tr>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold rounded-tl-lg">ລຳດັບ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຊື່ລາຍການ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ເບີໂທ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ບ້ານ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ເມືອງ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ແຂວງ</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white">
+            {currentItems.map((item, index) => (
+              <tr key={index}>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">{index + 1}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {item.First_names}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {item.Phone_Number}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {item.Village}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">  {item.District}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">  {item.Province}</td>
+                <div className="flex items-center justify-around">
+                  <img
+                    src={ic_edit}
+                    alt=""
+                    className="pr-2"
+                    onClick={() => {
+                      console.log(item.First_name);
+                      setValueEdit({
+                        Sl_ID: item.Sl_ID,
+                        First_name: item.First_names,
+                        Phone_Number: item.Phone_Number,
+                        Village: item.Village,
+                        District: item.District,
+                        Province: item.Province,
+                      });
+                      openEditModal();
+                    }}
+                  />
+                  <img
+                    src={ic_delete}
+                    alt=""
+                    onClick={() => {
+                      Swal.fire({
+                        title: "ທ່ານຕ້ອງການລົບ?",
+                        text: "ທ່ານຕ້ອງການລົບບໍ່!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "ລົບ ! ",
+                        cancelButtonText: "ຍົກເລີກ",
+                      }).then(async (result) => {
+                        if (result.isConfirmed) {
+                          dispatch(DeleteSupplier(item.Sl_ID));
+                        }
+                      });
+                    }}
+                  />
+                </div>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </form>
+      <div className="w-full flex justify-center px-5 mt-5">
+        <div
+          className="items-center justify-center flex cursor-pointer"
+          onClick={prevPage}
+        >
+          <IoIosArrowBack />
         </div>
-        <div className="border border-lineColor w-full py-3  bg-ggColor bg-opacity-20 flex justify-between items-center px-5 ">
-          <p className="text-base font-light flex justify-center items-center w-1/12 ">
-            ລຳດັບ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ຊື່ລາຍການ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/12">
-            ເບີໂທ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/12">
-            ບ້ານ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ເມືອງ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ແຂວງ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/12"></p>
+        <div className="text-base font-light mx-5">
+          {indexOfFirstItem + 1} -{" "}
+          {Math.min(indexOfLastItem, supplierArray.length)} of{" "}
+          {supplierArray.length}
         </div>
-        {currentItems.map((item, index) => (
-          <div
-            className="w-full py-5 bg-white flex justify-between items-center px-5 border-b border-lineColor"
-            key={index}
-          >
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {item.Sl_ID}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {item.First_names}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {item.Phone_Number}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {item.Village}
-            </p>
-
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {item.District}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {item.Province}
-            </p>
-            <div className="flex items-center w-1/12">
-              <img
-                src={ic_edit}
-                alt=""
-                className="pr-2"
-                onClick={() => {
-                  console.log(item.First_name);
-                  setValueEdit({
-                    Sl_ID: item.Sl_ID,
-                    First_name: item.First_names,
-                    Phone_Number: item.Phone_Number,
-                    Village: item.Village,
-                    District: item.District,
-                    Province: item.Province,
-                  });
-                  openEditModal();
-                }}
-              />
-              <img
-                src={ic_delete}
-                alt=""
-                onClick={() => {
-                  Swal.fire({
-                    title: "ທ່ານຕ້ອງການລົບ?",
-                    text: "ທ່ານຕ້ອງການລົບບໍ່!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "ລົບ ! ",
-                    cancelButtonText: "ຍົກເລີກ",
-                  }).then(async (result) => {
-                    if (result.isConfirmed) {
-                      dispatch(DeleteSupplier(item.Sl_ID));
-                    }
-                  });
-                }}
-              />
-            </div>
-          </div>
-        ))}
-        <div className="w-full flex justify-between px-5 my-3">
-          <div
-            className="w-1/12 border border-lineColor bg-white rounded-md items-center justify-center flex"
-            onClick={prevPage}
-          >
-            <p className="text-base font-light text-center ">ກັບຄືນ</p>
-          </div>
-          <div className="text-base font-light">
-            {indexOfFirstItem + 1} -{" "}
-            {Math.min(indexOfLastItem, supplierArray.length)} of{" "}
-            {supplierArray.length}
-          </div>
-          <div
-            className="w-1/12 border border-lineColor bg-white rounded-md items-center justify-center flex"
-            onClick={nextPage}
-          >
-            <p className="text-base font-light text-center ">ຕໍ່ໄປ</p>
-          </div>
+        <div
+          className="items-center justify-center flex cursor-pointer"
+          onClick={nextPage}
+        >
+          <IoIosArrowForward />
         </div>
       </div>
     </div>

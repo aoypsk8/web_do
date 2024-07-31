@@ -1,10 +1,10 @@
 // Home.js
 import React, { useEffect, useState } from "react";
-import { IoIosArrowDown, IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { LuCalendarSearch } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { GetAllProduct } from "../api/productAPI/productAction";
-
+import * as XLSX from 'xlsx';
 function formatNumber(number) {
   return new Intl.NumberFormat("en-US").format(number);
 }
@@ -54,88 +54,74 @@ function ProductReport() {
       setCurrentPage(currentPage - 1);
     }
   };
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(productData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'productData');
+    XLSX.writeFile(wb, 'productData_data.xlsx');
+  };
 
   return (
     <div className="p-10 flex flex-col justify-between">
       <p className=" mb-6 text-5xl">ລາຍງານສິນຄ້າທັງຫມົດ</p>
-      <div className="w-full h-3/4  border border-lineColor py-3 rounded-md flex flex-col justify-between mt-3">
-        <div className="flex justify-between items-center px-5 pb-5">
-          <p className="text-xl w-1/3">ລາຍການສິນຄ້າທັງຫມົດ</p>
-          
+      <div className="flex justify-between items-center w-full px-36">
+        <p className=" mt-10 text-xl">ຈຳນວນນສິນຄ້າທັງໝົດ: {productData.length} </p>
+        <button
+          onClick={exportToExcel}
+          className="px-4 py-2 bg-blue-500 text-black rounded mt-5 border border-black items-center flex justify-center"
+        >
+          Export to Excel
+        </button>
+      </div>
+      <form className="w-full px-36 mt-5">
+        <table className="w-full mt-10">
+          <thead>
+            <tr>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold rounded-tl-lg">ລຳດັບ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຊື່ລາຍການ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຮູບພາບ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຈຳນວນ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ລາຄາ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຄຳບັນຍາຍ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ປະເພດ</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white">
+            {currentItems.map((item, index) => (
+              <tr key={index}>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">{index + 1}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {item.Product_Name}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"><img
+                  src={item.Product_img}
+                  alt=""
+                  className="w-16 h-16 object-cover"
+                /></td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {item.ProductQty}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {formatNumber(item.Price)} ກີບ</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">  {item.Description}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">{item.Product_Type_Name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </form>
+      <div className="w-full flex justify-center px-5 mt-5">
+        <div
+          className="items-center justify-center flex cursor-pointer"
+          onClick={prevPage}
+        >
+          <IoIosArrowBack />
         </div>
-        <div className="border border-lineColor w-full py-3  bg-ggColor bg-opacity-20 flex justify-between items-center px-5 ">
-          <p className="text-base font-light flex justify-center items-center w-1/12 ">
-            ລຳດັບ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ຊື່ລາຍການ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/12">
-            ຮູບພາບ
-          </p>
-
-          <p className="text-base font-light flex justify-center items-center w-1/12">
-            ຈຳນວນ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ລາຄາ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ຄຳບັນຍາຍ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/12">
-            ປະເພດ
-          </p>
+        <div className="text-base font-light mx-5">
+          {indexOfFirstItem + 1} -{" "}
+          {Math.min(indexOfLastItem, supplierArray.length)} of{" "}
+          {supplierArray.length}
         </div>
-        {currentItems.map((item, index) => (
-          <div
-            className="w-full py-5 bg-white flex justify-between items-center px-5 border-b border-lineColor"
-            key={index}
-          >
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {item.Product_ID}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {item.Product_Name}
-            </p>
-            <img
-              src={item.Product_img}
-              alt=""
-              className="w-16 h-16 object-cover"
-            />
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {item.ProductQty}
-            </p>
-            <p className="text-xl font-light flex justify-center items-center w-1/6">
-              {formatNumber(item.Price)} ກີບ
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {item.Description}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {item.Product_Type_Name}
-            </p>
-          
-          </div>
-        ))}
-        <div className="w-full flex justify-between px-5 my-3">
-          <div
-            className="w-1/12 border border-lineColor bg-white rounded-md items-center justify-center flex"
-            onClick={prevPage}
-          >
-            <p className="text-base font-light text-center ">ກັບຄືນ</p>
-          </div>
-          <div className="text-base font-light">
-            {indexOfFirstItem + 1} -{" "}
-            {Math.min(indexOfLastItem, supplierArray.length)} of{" "}
-            {supplierArray.length}
-          </div>
-          <div
-            className="w-1/12 border border-lineColor bg-white rounded-md items-center justify-center flex"
-            onClick={nextPage}
-          >
-            <p className="text-base font-light text-center ">ຕໍ່ໄປ</p>
-          </div>
+        <div
+          className="items-center justify-center flex cursor-pointer"
+          onClick={nextPage}
+        >
+          <IoIosArrowForward />
         </div>
       </div>
     </div>

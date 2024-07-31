@@ -73,14 +73,7 @@ const HistorySoldComponent = ({ isOpen, onClose, sale, total, imgPay }) => {
             />
           </div>
           <div className="w-full my-5 flex px-10 justify-between pb-10 ">
-            <div className="w-1/3 flex justify-center items-center ">
-              <img
-                src={imgPay}
-                alt=""
-                className=" w-full h-[500px] object-contain "
-              />
-            </div>
-            <div className="w-2/3  border border-lineColor rounded-md flex flex-col justify-between ">
+            <div className="w-full  border border-lineColor rounded-md flex flex-col justify-between ">
               <div className="border border-lineColor w-full py-3  bg-head flex justify-between items-center px-5 ">
                 <p className="text-base font-light  flex justify-center w-1/6">
                   ລຳດັບ
@@ -113,7 +106,7 @@ const HistorySoldComponent = ({ isOpen, onClose, sale, total, imgPay }) => {
                   <p className="text-base font-light  flex justify-center w-2/6">
                     {item.Product_Name}
                   </p>
-                  <div className="flex justify-center w-1/6">
+                  <div className="flex justify-center w-1/6  h-20">
                     <img src={item.Product_img} alt="" className=" " />
                   </div>
                

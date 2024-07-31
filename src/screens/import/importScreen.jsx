@@ -1,7 +1,5 @@
-// Home.js
 import React, { useEffect, useState } from "react";
-import { IoIosArrowDown, IoIosArrowBack } from "react-icons/io";
-import { LuCalendarSearch } from "react-icons/lu";
+import { IoIosArrowDown, IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "../../App.css";
 import ic_save1 from "../../assets/icons/save1.svg";
 import ic_close1 from "../../assets/icons/close1.svg";
@@ -11,7 +9,7 @@ import {
   GetAllImportPro,
   GetAllSupplier,
 } from "../../api/importAPI/importAction";
-import DatePicker from "react-datepicker";
+import * as XLSX from 'xlsx';
 
 function formatNumber(number) {
   return new Intl.NumberFormat("en-US").format(number);
@@ -55,12 +53,14 @@ function ImportScreen() {
   useEffect(() => {
     dispatch(GetAllSupplier());
     dispatch(GetAllImportPro());
+  }, [dispatch]);
+
+  useEffect(() => {
     setImportProData(importPro || []);
     setSupplierData(supplier || []);
     setUserId(userInfo.Emp_ID);
     filterSalesByDate(selectedDate);
-    // console.log(supplier);
-  }, [dispatch, value, selectedDate]);
+  }, [importPro, supplier, userInfo, selectedDate]);
 
   const [selectedSupplier, setSelectedSupplier] = useState({
     Sl_ID: null,
@@ -180,9 +180,16 @@ function ImportScreen() {
       </div>
     );
   };
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(importProData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'importProData');
+    XLSX.writeFile(wb, 'importProData_data.xlsx');
+  };
+
   return (
     <div className="p-10 flex flex-col justify-between">
-      <p className=" mb-6 text-5xl">ການນຳເຂົ້າສິນຄ້າ</p>
       <div className="w-full  grid grid-cols-3  ">
         <div className="  pl-10">
           {" "}
@@ -241,118 +248,93 @@ function ImportScreen() {
           />
         </div>
       </div>
-      <div className=" flex justify-end px-5 ">
-        <div
-          className="w-1/6 bg-redBottle flex justify-between py-1 px-5 rounded-md items-center "
-          onClick={() => handleclear()}
+      <div className="flex px-10 items-center">
+        <button
+          className="bg-buttonColor flex items-center text-center text-white rounded py-2 px-8 mx-5"
+          onClick={handleSubmit}
         >
-          <img src={ic_close1} alt="" className=" " />
-          <div className="text-white text-2xl">ຍົກເລີກ</div>
-        </div>
-        <div className="mx-2"></div>
-        <div
-          className="w-1/6 bg-greenBottle flex justify-between py-1 px-5 rounded-md items-center "
-          onClick={() => handleSubmit()}
+          <img className="w-5 h-5 mr-1 " src={ic_save1} />
+          <p>Save</p>
+        </button>
+        <button
+          className="bg-buttonColor flex items-center text-center text-white rounded py-2 px-8 mx-5"
+          onClick={handleclear}
         >
-          <img src={ic_save1} alt="" className=" " />
-          <div className="text-white text-2xl ">ບັນທຶກ</div>
+          <img className="w-5 h-5 mr-1 " src={ic_close1} />
+          <p>Cancel</p>
+        </button>
+        <div>
+          <button
+            className="bg-green-500 text-white px-4 py-2 rounded ml-4"
+            onClick={exportToExcel}
+          >
+            Export to Excel
+          </button>
         </div>
       </div>
-      <div className="w-full h-3/4  border border-lineColor py-3 rounded-md flex flex-col justify-between mt-3">
-        <div className="flex justify-between items-center px-5 pb-5">
-          <p className="text-xl w-1/3">ລາຍການນຳເຂົ້າສິນຄ້າທັງຫມົດ</p>
-          <div className=" border w-1/5 border-lineColor px-5 py-2 rounded-md flex items-center justify-between">
-            <LuCalendarSearch size={30} color="#625F5F" />
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              dateFormat="dd/MM/yyyy"
-              className="w-full rounded text-start ml-2 text-unSelectText"
-            />
-          </div>
+
+      <div className="flex justify-between mx-10 ">
+        <div>
+          {" "}
+          <p className="text-2xl font-bold">ລາຍການຂາຍສິນຄ້າ</p>
         </div>
-        <div className="border border-lineColor w-full py-3  bg-ggColor bg-opacity-20 flex justify-between items-center px-5 ">
-          <p className="text-base font-light flex justify-center items-center w-1/12 ">
-            ລຳດັບ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ຊື່ລາຍການ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/12">
-            ເວລາ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/12">
-            ວັນທີ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ລາຄາ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ຜູ້ສະຫນອງ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ພະນັກງານ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/12">
-            ຈຳນວນ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ຍອດລວມ
-          </p>
+        <div className="px-4">
+          <input
+            type="date"
+            value={selectedDate ? selectedDate.toISOString().substr(0, 10) : ""}
+            onChange={(e) => setSelectedDate(e.target.value ? new Date(e.target.value) : null)}
+            className="border border-gray-300 rounded-md px-3 py-2"
+          />
         </div>
-        {currentItems.map((item, index) => (
-          <div
-            className="w-full py-5 bg-white flex justify-between items-center px-5 border-b border-lineColor"
-            key={index}
-          >
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {item.Ip_ID}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {item.Pro_name}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {formatTime(item.Date_received)}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {formatDate(item.Date_received)}
-            </p>
-            <p className="text-xl font-light flex justify-center items-center w-1/6">
-              {formatNumber(item.Sub_Price)} ກີບ
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {item.First_names}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {item.First_name}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/12">
-              {item.ReceivedQty}
-            </p>
-            <p className="text-xl font-light flex justify-center items-center w-1/6">
-              {formatNumber(item.Price_Total)} ກີບ
-            </p>
-          </div>
-        ))}
-        <div className="w-full flex justify-between px-5 my-3">
-          <div
-            className="w-1/12 border border-lineColor bg-white rounded-md items-center justify-center flex"
-            onClick={prevPage}
-          >
-            <p className="text-base font-light text-center ">ກັບຄືນ</p>
-          </div>
-          <div className="text-base font-light">
-            {indexOfFirstItem + 1} -{" "}
-            {Math.min(indexOfLastItem, filteredSaleData.length)} of{" "}
-            {filteredSaleData.length}
-          </div>
-          <div
-            className="w-1/12 border border-lineColor bg-white rounded-md items-center justify-center flex"
-            onClick={nextPage}
-          >
-            <p className="text-base font-light text-center ">ຕໍ່ໄປ</p>
-          </div>
-        </div>
+      </div>
+      <form className="w-full px-36 mt-5">
+        <table className="w-full mt-10">
+          <thead>
+            <tr>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold rounded-tl-lg">ລຳດັບ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຊື່ລາຍການ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ເວລາ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ວັນທີ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ລາຄາ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຜູ້ສະຫນອງ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ພະນັກງານ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຈຳນວນ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຍອດລວມ</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white">
+            {currentItems.map((item, index) => (
+              <tr key={index} className="hover:cursor-pointer hover:bg-ggColor hover:bg-opacity-20">
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">{index + 1}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">  {item.Pro_name}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">  {formatTime(item.Date_received)}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {formatDate(item.Date_received)}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {formatNumber(item.Sub_Price)} ກີບ</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {item.First_names}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {item.First_name}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {item.ReceivedQty}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">  {formatNumber(item.Price_Total)} ກີບ</td>
+                
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </form>
+      <div className="flex justify-between mx-10">
+        <button
+          onClick={prevPage}
+          disabled={currentPage === 1}
+          className="bg-buttonColor text-white px-4 py-2 rounded disabled:bg-gray-300"
+        >
+          <IoIosArrowBack />
+        </button>
+        <button
+          onClick={nextPage}
+          disabled={currentPage === totalPages}
+          className="bg-buttonColor text-white px-4 py-2 rounded disabled:bg-gray-300"
+        >
+          <IoIosArrowForward />
+        </button>
       </div>
     </div>
   );

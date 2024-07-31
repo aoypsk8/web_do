@@ -24,12 +24,15 @@ import { IoIosArrowDown } from "react-icons/io";
 import { logoutUser } from "../../api/authAction";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 
 function Aside({ onItemSelected }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isDropDownManage, setIsDropDownManage] = useState(false);
   const [isDropDownReport, setIsDropDownReport] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const toggleDropDownManage = () => {
     setIsDropDownManage(!isDropDownManage);
@@ -52,7 +55,7 @@ function Aside({ onItemSelected }) {
 
   useEffect(() => {
     setUserInforData(userInfo);
-  }, [userInfo]);
+  }, [userInfo,reload]);
 
   // NavItem component
   const NavItem = ({
@@ -66,14 +69,12 @@ function Aside({ onItemSelected }) {
     manage,
   }) => (
     <nav
-      className={` ${
-        selectedItem === text ? "bg-ggColor text-white" : "bg-white"
-      }`}
+      className={` ${selectedItem === text ? "bg-ggColor text-white" : "bg-white"
+        }`}
     >
       <div
-        className={`flex py-2 px-6 ${
-          dropDown ? "justify-between items-center" : ""
-        }`}
+        className={`flex py-2 px-6 ${dropDown ? "justify-between items-center" : ""
+          }`}
         onClick={dropDown ? toggleDropDown : onClick}
       >
         <div className="flex justify-center items-center">
@@ -99,28 +100,25 @@ function Aside({ onItemSelected }) {
 
       {manage ? (
         <div
-          className={`overflow-hidden transition-max-height duration-700 pl-5 ${
-            isDropDown ? "max-h-screen" : "max-h-0"
-          }`}
+          className={`overflow-hidden transition-max-height duration-700 pl-5 ${isDropDown ? "max-h-screen" : "max-h-0"
+            }`}
         >
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center  ${
-              selectedItem === "ຈັດການຂໍ້ມູນສິນຄ້າ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center  ${selectedItem === "ຈັດການຂໍ້ມູນສິນຄ້າ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("manage-product");
               setSelectedItem("ຈັດການຂໍ້ມູນສິນຄ້າ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ຈັດການຂໍ້ມູນສິນຄ້າ"
-                  ? ic_managePro_color
-                  : ic_managePro
-              }`}
+              src={`${selectedItem === "ຈັດການຂໍ້ມູນສິນຄ້າ"
+                ? ic_managePro_color
+                : ic_managePro
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -129,22 +127,20 @@ function Aside({ onItemSelected }) {
 
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ຈັດການຂໍ້ມູນພະນັກງານ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ຈັດການຂໍ້ມູນພະນັກງານ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("manage-employee");
               setSelectedItem("ຈັດການຂໍ້ມູນພະນັກງານ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ຈັດການຂໍ້ມູນພະນັກງານ"
-                  ? ic_people_color
-                  : ic_people
-              }`}
+              src={`${selectedItem === "ຈັດການຂໍ້ມູນພະນັກງານ"
+                ? ic_people_color
+                : ic_people
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -152,22 +148,20 @@ function Aside({ onItemSelected }) {
           </a>
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ຈັດການຂໍ້ມູນລູກຄ້າ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ຈັດການຂໍ້ມູນລູກຄ້າ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("customer-employee");
               setSelectedItem("ຈັດການຂໍ້ມູນລູກຄ້າ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ຈັດການຂໍ້ມູນລູກຄ້າ"
-                  ? ic_people_color
-                  : ic_people
-              }`}
+              src={`${selectedItem === "ຈັດການຂໍ້ມູນລູກຄ້າ"
+                ? ic_people_color
+                : ic_people
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -175,20 +169,18 @@ function Aside({ onItemSelected }) {
           </a>
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ຈັດການປະເພດສິນຄ້າ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ຈັດການປະເພດສິນຄ້າ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("type");
               setSelectedItem("ຈັດການປະເພດສິນຄ້າ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ຈັດການປະເພດສິນຄ້າ" ? ic_type_color : ic_type
-              }`}
+              src={`${selectedItem === "ຈັດການປະເພດສິນຄ້າ" ? ic_type_color : ic_type
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -196,20 +188,18 @@ function Aside({ onItemSelected }) {
           </a>
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ຈັດການຜູ້ສະຫນອງ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ຈັດການຜູ້ສະຫນອງ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("provider");
               setSelectedItem("ຈັດການຜູ້ສະຫນອງ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ຈັດການຜູ້ສະຫນອງ" ? ic_type_color : ic_type
-              }`}
+              src={`${selectedItem === "ຈັດການຜູ້ສະຫນອງ" ? ic_type_color : ic_type
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -220,28 +210,25 @@ function Aside({ onItemSelected }) {
         // report
 
         <div
-          className={`overflow-hidden transition-max-height duration-700 pl-5 ${
-            isDropDown ? "max-h-screen" : "max-h-0"
-          }`}
+          className={`overflow-hidden transition-max-height duration-700 pl-5 ${isDropDown ? "max-h-screen" : "max-h-0"
+            }`}
         >
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ລາຍງານປະຫວັດການຂາຍ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ລາຍງານປະຫວັດການຂາຍ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("report-history");
               setSelectedItem("ລາຍງານປະຫວັດການຂາຍ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ລາຍງານປະຫວັດການຂາຍ"
-                  ? ic_listOrder_color
-                  : ic_listOrder
-              }`}
+              src={`${selectedItem === "ລາຍງານປະຫວັດການຂາຍ"
+                ? ic_listOrder_color
+                : ic_listOrder
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -250,22 +237,20 @@ function Aside({ onItemSelected }) {
 
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ລາຍງານການນຳເຂົ້າສິນຄ້າ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ລາຍງານການນຳເຂົ້າສິນຄ້າ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("report-import");
               setSelectedItem("ລາຍງານການນຳເຂົ້າສິນຄ້າ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ລາຍງານການນຳເຂົ້າສິນຄ້າ"
-                  ? ic_type_color
-                  : ic_type
-              }`}
+              src={`${selectedItem === "ລາຍງານການນຳເຂົ້າສິນຄ້າ"
+                ? ic_type_color
+                : ic_type
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -274,22 +259,20 @@ function Aside({ onItemSelected }) {
 
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ລາຍງານຂໍ້ມູນສິນຄ້າ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ລາຍງານຂໍ້ມູນສິນຄ້າ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("report-product");
               setSelectedItem("ລາຍງານຂໍ້ມູນສິນຄ້າ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ລາຍງານຂໍ້ມູນສິນຄ້າ"
-                  ? ic_managePro_color
-                  : ic_managePro
-              }`}
+              src={`${selectedItem === "ລາຍງານຂໍ້ມູນສິນຄ້າ"
+                ? ic_managePro_color
+                : ic_managePro
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -297,22 +280,20 @@ function Aside({ onItemSelected }) {
           </a>
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ລາຍງານຂໍ້ມູນພະນັກງານ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ລາຍງານຂໍ້ມູນພະນັກງານ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("report-employee");
               setSelectedItem("ລາຍງານຂໍ້ມູນພະນັກງານ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ລາຍງານຂໍ້ມູນພະນັກງານ"
-                  ? ic_people_color
-                  : ic_people
-              }`}
+              src={`${selectedItem === "ລາຍງານຂໍ້ມູນພະນັກງານ"
+                ? ic_people_color
+                : ic_people
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -320,22 +301,20 @@ function Aside({ onItemSelected }) {
           </a>
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ລາຍງານຂໍ້ມູນລູກຄ້າ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ລາຍງານຂໍ້ມູນລູກຄ້າ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("report-customer");
               setSelectedItem("ລາຍງານຂໍ້ມູນລູກຄ້າ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ລາຍງານຂໍ້ມູນລູກຄ້າ"
-                  ? ic_people_color
-                  : ic_people
-              }`}
+              src={`${selectedItem === "ລາຍງານຂໍ້ມູນລູກຄ້າ"
+                ? ic_people_color
+                : ic_people
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -344,20 +323,18 @@ function Aside({ onItemSelected }) {
 
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ລາຍງານປະເພດສິນຄ້າ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ລາຍງານປະເພດສິນຄ້າ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("report-type");
               setSelectedItem("ລາຍງານປະເພດສິນຄ້າ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ລາຍງານປະເພດສິນຄ້າ" ? ic_type_color : ic_type
-              }`}
+              src={`${selectedItem === "ລາຍງານປະເພດສິນຄ້າ" ? ic_type_color : ic_type
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -365,20 +342,18 @@ function Aside({ onItemSelected }) {
           </a>
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ລາຍງານຜູ້ສະຫນອງ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ລາຍງານຜູ້ສະຫນອງ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("report-supplier");
               setSelectedItem("ລາຍງານຜູ້ສະຫນອງ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ລາຍງານຜູ້ສະຫນອງ" ? ic_type_color : ic_type
-              }`}
+              src={`${selectedItem === "ລາຍງານຜູ້ສະຫນອງ" ? ic_type_color : ic_type
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -387,20 +362,18 @@ function Aside({ onItemSelected }) {
           {/* laiy jai  */}
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ລາຍງານລາຍຈ່າຍ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ລາຍງານລາຍຈ່າຍ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("report-out");
               setSelectedItem("ລາຍງານລາຍຈ່າຍ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ລາຍງານລາຍຈ່າຍ" ? ic_type_color : ic_type
-              }`}
+              src={`${selectedItem === "ລາຍງານລາຍຈ່າຍ" ? ic_type_color : ic_type
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -408,20 +381,18 @@ function Aside({ onItemSelected }) {
           </a>
           <a
             href="#"
-            className={`flex py-3 pl-6 items-center ${
-              selectedItem === "ລາຍງານລາຍຮັບ"
-                ? "bg-ggColor text-white"
-                : "bg-white"
-            }`}
+            className={`flex py-3 pl-6 items-center ${selectedItem === "ລາຍງານລາຍຮັບ"
+              ? "bg-ggColor text-white"
+              : "bg-white"
+              }`}
             onClick={() => {
               onItemSelected("report-in");
               setSelectedItem("ລາຍງານລາຍຮັບ");
             }}
           >
             <img
-              src={`${
-                selectedItem === "ລາຍງານລາຍຮັບ" ? ic_type_color : ic_type
-              }`}
+              src={`${selectedItem === "ລາຍງານລາຍຮັບ" ? ic_type_color : ic_type
+                }`}
               alt=""
               className="w-8 h-8"
             />
@@ -435,7 +406,7 @@ function Aside({ onItemSelected }) {
 
   return (
     <div className="h-screen flex flex-col justify-between w-96 p-3 bg-bgbg">
-      <div className="pb-5 bg-white shadow-xl flex flex-col flex-grow">
+      <div className="pb-5 bg-white shadow-xl flex flex-col flex-grow rounded-3xl">
         <div className="w-full flex justify-center items-center py-2">
           <img src={myLogo} alt="" className="w-36 h-36" />
         </div>
@@ -450,6 +421,15 @@ function Aside({ onItemSelected }) {
               setSelectedItem("ໜ້າຫຼັກ");
             }}
           />
+           <NavItem
+            iconSrc={ic_listOrder}
+            iconCor={ic_listOrder_color}
+            text="ຂາຍສິນຄ້າຫນ້າຮ້ານ"
+            onClick={() => {
+              onItemSelected("sellFront");
+              setSelectedItem("ຂາຍສິນຄ້າຫນ້າຮ້ານ");
+            }}
+          />
           <NavItem
             iconSrc={ic_listOrder}
             iconCor={ic_listOrder_color}
@@ -459,15 +439,7 @@ function Aside({ onItemSelected }) {
               setSelectedItem("ລາຍການສັ່ງຊື້");
             }}
           />
-          <NavItem
-            iconSrc={ic_listOrder}
-            iconCor={ic_listOrder_color}
-            text="ຂາຍສິນຄ້າຫນ້າຮ້ານ"
-            onClick={() => {
-              onItemSelected("sellFront");
-              setSelectedItem("ຂາຍສິນຄ້າຫນ້າຮ້ານ");
-            }}
-          />
+         
           <NavItem
             iconSrc={ic_hisSold}
             iconCor={ic_hisSold_color}
@@ -535,7 +507,10 @@ function Aside({ onItemSelected }) {
                 cancelButtonText: "ຍົກເລີກ",
               }).then(async (result) => {
                 if (result.isConfirmed) {
-                  dispatch(logoutUser());
+                  dispatch(logoutUser()).then((success) => {
+                    setReload(!reload);
+                    navigate("/");
+                  });
                 }
               });
             }}

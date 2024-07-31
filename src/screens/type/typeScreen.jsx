@@ -14,6 +14,7 @@ import {
 import product from "../../../src/assets/lloo-removebg-preview.png";
 import TypeEditModal from "./modal/typeEditModal";
 import Swal from "sweetalert2";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const formatTime = (isoDateString) => {
   const date = new Date(isoDateString);
@@ -70,12 +71,6 @@ function TypeScreen() {
     Product_Type_Name: "",
     img: "",
   });
-
-  // const [valueEdit, setValueEdit] = useState({
-  //   Product_Type_ID: "",
-  //   Product_Type_Name: "",
-  //
-  // });
 
   const handleChange = (e) => {
     setValue({
@@ -192,95 +187,81 @@ function TypeScreen() {
           <div className="text-white text-2xl ">ບັນທຶກ</div>
         </div>
       </div>
-      <div className="w-full h-3/4  border border-lineColor py-3 rounded-md flex flex-col justify-between mt-3">
-        <div className="flex justify-between items-center px-5 pb-5">
-          <p className="text-xl w-1/3">ລາຍການປະເພດສິນຄ້າທັງຫມົດ</p>
+      <form className="w-full px-36 mt-5">
+        <table className="w-full mt-10">
+          <thead>
+            <tr>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold rounded-tl-lg">ລຳດັບ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ຊື່ລາຍການ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ເວລາ</th>
+              <th className="border border-btnn border-opacity-50 px-4 py-2 text-center font-semibold">ວັນທີ</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white">
+            {currentItems.map((item, index) => (
+              <tr key={index}>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">{index + 1}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {item.Product_Type_Name}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light"> {formatTime(item.timeStamp)}</td>
+                <td className="border border-btnn border-opacity-50 px-4 py-2 text-center font-light">  {formatDate(item.timeStamp)}</td>
+                <div className="flex items-center justify-around">
+                  <img
+                    src={ic_edit}
+                    alt=""
+                    className="pr-2"
+                    onClick={() => {
+                      setValueEdit({
+                        Product_Type_ID: item.Product_Type_ID,
+                        Product_Type_Name: item.Product_Type_Name,
+                        img: item.img,
+                      });
+                      openEditModal();
+                    }}
+                  />
+                  <img
+                    src={ic_delete}
+                    alt=""
+                    onClick={() => {
+                      Swal.fire({
+                        title: "ທ່ານຕ້ອງການລົບ?",
+                        text: "ທ່ານຕ້ອງການລົບບໍ່!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "ລົບ  ! ",
+                        cancelButtonText: "ຍົກເລີກ",
+                      }).then(async (result) => {
+                        if (result.isConfirmed) {
+                          dispatch(DeleteType(item.Product_Type_ID));
+                        }
+                      });
+
+                    }}
+                  />
+                </div>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </form>
+      <div className="w-full flex justify-center px-5 mt-5">
+        <div
+          className="items-center justify-center flex cursor-pointer"
+          onClick={prevPage}
+        >
+          <IoIosArrowBack />
         </div>
-        <div className="border border-lineColor w-full py-3  bg-ggColor bg-opacity-20 flex justify-between items-center px-5 ">
-          <p className="text-base font-light flex justify-center items-center w-1/6   ">
-            ລຳດັບ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ຊື່ລາຍການ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ເວລາ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/6">
-            ວັນທີ
-          </p>
-          <p className="text-base font-light flex justify-center items-center w-1/12"></p>
+        <div className="text-base font-light mx-5">
+          {indexOfFirstItem + 1} -{" "}
+          {Math.min(indexOfLastItem, supplierArray.length)} of{" "}
+          {supplierArray.length}
         </div>
-        {currentItems.map((item) => (
-          <div className="w-full py-5 bg-white flex justify-between items-center px-5 border-b border-lineColor">
-            <p className="text-base font-light flex justify-center items-center w-1/6 ">
-              {item.Product_Type_ID}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {item.Product_Type_Name}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {formatTime(item.timeStamp)}
-            </p>
-            <p className="text-base font-light flex justify-center items-center w-1/6">
-              {formatDate(item.timeStamp)}
-            </p>
-            <div className="flex items-center w-1/12">
-              <img
-                src={ic_edit}
-                alt=""
-                className="pr-2"
-                onClick={() => {
-                  setValueEdit({
-                    Product_Type_ID: item.Product_Type_ID,
-                    Product_Type_Name: item.Product_Type_Name,
-                    img: item.img,
-                  });
-                  openEditModal();
-                }}
-              />
-              <img
-                src={ic_delete}
-                alt=""
-                onClick={() => {
-                  Swal.fire({
-                    title: "ທ່ານຕ້ອງການລົບ?",
-                    text: "ທ່ານຕ້ອງການລົບບໍ່!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "ລົບ  ! ",
-                    cancelButtonText: "ຍົກເລີກ",
-                  }).then(async (result) => {
-                    if (result.isConfirmed) {
-                      dispatch(DeleteType(item.Product_Type_ID));
-                    }
-                  });
-                  
-                }}
-              />
-            </div>
-          </div>
-        ))}
-        <div className="w-full flex justify-between px-5 my-3">
-          <div
-            className="w-1/12 border border-lineColor bg-white rounded-md items-center justify-center flex"
-            onClick={prevPage}
-          >
-            <p className="text-base font-light text-center ">ກັບຄືນ</p>
-          </div>
-          <div className="text-base font-light">
-            {indexOfFirstItem + 1} -{" "}
-            {Math.min(indexOfLastItem, supplierArray.length)} of{" "}
-            {supplierArray.length}
-          </div>
-          <div
-            className="w-1/12 border border-lineColor bg-white rounded-md items-center justify-center flex"
-            onClick={nextPage}
-          >
-            <p className="text-base font-light text-center ">ຕໍ່ໄປ</p>
-          </div>
+        <div
+          className="items-center justify-center flex cursor-pointer"
+          onClick={nextPage}
+        >
+          <IoIosArrowForward />
         </div>
       </div>
     </div>
